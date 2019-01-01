@@ -3,7 +3,6 @@ const path = require('path');
 const express = require('express');
 const box = require('./box');
 const app = express();
-const readFile = (path) => { try { return fs.readFileSync(path, 'utf8'); } catch (ignore) { return ignore.message; } };
 
 const buildPage = (title, content) => {
     let config = {
@@ -18,6 +17,10 @@ const buildPage = (title, content) => {
         scripts: [
             '/static/js/prism.js'
         ],
+        head: {
+            tag: 'head',
+            content: readFile(path.join(__dirname, 'public/head.html'))
+        },
         body: {
             tag: 'body',
             content: readFile(path.join(__dirname, 'public/body.html')),
@@ -29,10 +32,6 @@ const buildPage = (title, content) => {
                     classList: ['language-javascript'] 
                 }]
             }
-        },
-        head: {
-            tag: 'head',
-            content: readFile(path.join(__dirname, 'public/head.html'))
         },
         injections: {
             'btnDownload': new box({
@@ -51,6 +50,19 @@ const buildPage = (title, content) => {
     };
 
     return box.build(config);
+};
+
+const readFile = (path) => { 
+    try { 
+        return fs.readFileSync(path, 'utf8'); 
+    } 
+    catch (ignore) { 
+        return new box({
+            tag: 'p',
+            content: ignore.message,
+            classList: ['alert', 'alert-error']
+        }).html(); 
+    } 
 };
 
 app.get('/', (req, res) => { res.send(buildPage('BoxJS: A boxy HTML generator.')); });

@@ -1,6 +1,10 @@
+/* non-choppy scroll */
 html { scroll-behavior: smooth; }
+
+/* override Skeleton's code border style in favor of PrismJS  */
 code { border: none; }
 
+/* color change */
 body {
   animation: colorchange 50s;
   animation-iteration-count: infinite;
@@ -23,6 +27,43 @@ body {
   75%  { background: #00ffe2; }
   100% { background: #9dff00; }
 }
+
+/*
+Skeleton Alerts @ http://nathancahill.github.io/skeleton-alerts/
+*/
+.alert {
+  display: block;
+  padding: 20px;
+  border-left: 5px solid;
+}
+
+.alert-success {
+  background-color: #D5F5E3;
+  border-left-color: #2ECC71;
+  color: #2ECC71;
+}
+
+.alert-info {
+  background-color: #D6EAF8;
+  border-left-color: #3498DB;
+  color: #3498DB;
+}
+
+.alert-warning {
+  background-color: #FCF3CF;
+  border-left-color: #F1C40F;
+  color: #F1C40F;
+}
+
+.alert-error {
+  background-color: #F2D7D5;
+  border-left-color: #C0392B;
+  color: #C0392B;
+}
+
+/*
+Bits I was willing to keep from the original file.
+*/
 
 .button { border-radius: 100px; }
 .section { padding: 8rem 0 7rem; text-align: center; }
