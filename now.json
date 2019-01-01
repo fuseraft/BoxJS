@@ -2,6 +2,11 @@
     "version": 2,
     "name": "boxjs",
     "builds": [
-        { "src": "index.js", "use": "@now/node-server" }
+        { "src": "index.js", "use": "@now/node-server@canary" },
+        { "src": "/public/css/*.css", "use": "@now/static" },
+        { "src": "/public/js/*.js", "use": "@now/static" }
+    ],
+    "routes": [
+        { "src": "/.*", "dest": "/" }
     ]
 }

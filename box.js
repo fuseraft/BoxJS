@@ -165,7 +165,7 @@ class Box {
     }
 
     static build (config) {
-        let html = new Box({ tag: 'html', beforeContent: '<!doctype html>' }),
+        let html = new Box({ tag: 'html' }),
             head = new Box({ tag: 'head' }),
             body = new Box({ tag: 'body' });
         
