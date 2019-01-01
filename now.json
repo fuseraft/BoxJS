@@ -2,7 +2,7 @@
     "version": 2,
     "name": "boxjs",
     "builds": [
-        { "src": "index.js", "use": "@now/node-server" }
+        { "src": "./express/index.js", "use": "@now/node-server" }
     ],
     "routes": [
         { "src": "/(.*)", "dest": "index.js" }
