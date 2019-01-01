@@ -1,9 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
-const box = require('../box');
+const box = require('./box');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 const readFile = (path) => { try { return fs.readFileSync(path, 'utf8'); } catch (ignore) { return ''; } };
 
 const buildPage = (title, content) => {
@@ -21,19 +21,19 @@ const buildPage = (title, content) => {
         ],
         body: {
             tag: 'body',
-            content: readFile('./box/body.html'),
+            content: readFile(path.join(__dirname, 'box/body.html')),
             after: {
                 tag: 'pre',
                 children: [{ 
                     tag: 'code', 
-                    content: readFile('./app.js'), 
+                    content: readFile(path.join(__dirname, 'index.js')), 
                     classList: ['language-javascript'] 
                 }]
             }
         },
         head: {
             tag: 'head',
-            content: readFile('./box/head.html')
+            content: readFile(path.join(__dirname, 'box/head.html'))
         },
         injections: {
             'btnDownload': new box({
@@ -57,8 +57,8 @@ const buildPage = (title, content) => {
 app.get('/', (req, res) => { res.send(buildPage('BoxJS: A boxy HTML generator.')); });
 app.get('/download', (req, res) => { 
     res.set('Content-Type', 'application/javascript');
-    res.download(path.join(__dirname, 'box.js')); 
+    res.download('box.js');
 });
-app.get('/code', (req, res) => { res.sendFile('box.js', { root: __dirname })});
-app.use(express.static('.'));
+app.get('/code', (req, res) => { res.sendFile('box.js')});
+app.use(express.static('/box'));
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
