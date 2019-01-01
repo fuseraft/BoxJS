@@ -1,5 +1,9 @@
 const fs = require('fs');
-const box = require('./box');
+const path = require('path');
+const express = require('express');
+const box = require('../box');
+const app = express();
+const port = 3000;
 const readFile = (path) => { try { return fs.readFileSync(path, 'utf8'); } catch (ignore) { return ''; } };
 
 const buildPage = (title, content) => {
@@ -50,6 +54,11 @@ const buildPage = (title, content) => {
     return box.build(config);
 };
 
-module.exports = (req, res) => {
-  res.send(buildPage('BoxJS: A boxy HTML generator.')); });
-};
+app.get('/', (req, res) => { res.send(buildPage('BoxJS: A boxy HTML generator.')); });
+app.get('/download', (req, res) => { 
+    res.set('Content-Type', 'application/javascript');
+    res.download(path.join(__dirname, 'box.js')); 
+});
+app.get('/code', (req, res) => { res.sendFile('box.js', { root: __dirname })});
+app.use(express.static('.'));
+app.listen(port, () => console.log(`Example app listening on port ${port}!`));
