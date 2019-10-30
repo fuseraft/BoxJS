@@ -7,7 +7,7 @@ class Box {
     * @property {Box} before            -   Left-sibling Box
     * @property {Box} after             -   Right-sibling Box
     * @property {string} beforeContent  -   Left side content
-    * @property {string} rightContent   -   Right side content
+    * @property {string} afterContent   -   Right side content
     * @property {string} content        -   Inner content
     * @property {string[]} attributes   -   Attributes list
     * @property {string[]} classList    -   Class list
