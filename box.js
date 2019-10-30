@@ -22,6 +22,7 @@ class Box {
         this.before = null; // Box
         this.after = null; // Box
         this.beforeContent = '';
+		this.content = '';
         this.afterContent = '';
         this.attributes = [];
         this.classList = [];
@@ -30,22 +31,8 @@ class Box {
 
         if (config) {
             if (config.tag && typeof config.tag === 'string') this.tag = config.tag;
-            if (config.before) {
-                if (Box.isBox(config.before)) {
-                    this.before = config.before;
-                }
-                else if (Box.isBoxLike(config.before)) {
-                    this.before = new Box(config.before);
-                }
-            }
-            if (config.after) {
-                if (Box.isBox(config.after)) {
-                    this.after = config.after;
-                }
-                else if (Box.isBoxLike(config.after)) {
-                    this.after = new Box(config.after);
-                }
-            }
+            if (config.before) this.before = tryGetBox(config.before);
+            if (config.after) this.after = tryGetBox(config.after);
             if (config.beforeContent && typeof config.beforeContent === 'string') this.beforeContent = config.beforeContent;
             if (config.afterContent && typeof config.afterContent === 'string') this.afterContent = config.afterContent;
             if (config.attributes && Array.isArray(config.attributes)) this.attributes = config.attributes;
@@ -86,7 +73,7 @@ class Box {
     /* ------------------------------------------------------------------------------------- 
     Instance Methods 
     */
-
+	
     add (_box_) {
         if (Array.isArray(_box_)) {
             this.children = [...this.children, ..._box_];
@@ -124,6 +111,13 @@ class Box {
     /* ------------------------------------------------------------------------------------- 
     Static Methods 
     */
+	
+	static tryGetBox (source) {
+		var b = null;
+		if (Box.isBox(source)) b = source;
+		else if (Box.isBoxLike(source)) b = new Box(source);
+		return b;
+	}
 
     static isBoxLike (test) {
         const BoxConfigProperties = [
@@ -147,6 +141,7 @@ class Box {
             return Box.unbox(v); 
         }).join(''); 
     }
+	
     static unbox (_box_) { 
         if (Box.isBox(_box_)) {
             if (_box_.hasChildren) {
@@ -176,14 +171,11 @@ class Box {
             head.content = '';
             body.content = '';
 
-            if (Box.isBox(config.head)) head = config.head;
-            else if (Box.isBoxLike(config.head)) head = new Box(config.head);
-            
-            if (Box.isBox(config.body)) body = config.body;
-            else if (Box.isBoxLike(config.body)) body = new Box(config.body);
+			if (config.head) head = Box.tryGetBox(config.head);
+            if (config.body) body = Box.tryGetBox(config.body);
 
-            if (isString(config.title)) {
-                if (head.content.indexOf('<title>') > -1) {
+            if (isString(config.title) && head) {
+                if (head.content && head.content.indexOf('<title>') > -1) {
                     head.content = head.content.replace(/<title>*<\/title>/, config.title);
                 }
                 else {
