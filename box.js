@@ -46,12 +46,12 @@ class Box {
     Properties
     */
 
-    get hasChildren() => return this.children && this.children.length > 0;
+    get hasChildren() { return this.children && this.children.length > 0; }
 
-    get content() => return this._content || '';
+    get content() { return this._content || '' };
     set content(_content_) { this._content = _content_ || ''; }
 
-    get beforeContent() => this._beforeContent || '';
+    get beforeContent() { return this._beforeContent || '' };
     set beforeContent(_beforeContent_) { this._beforeContent = _beforeContent_; }
 
     get innerContent() {
@@ -67,7 +67,7 @@ class Box {
         return _innerContent;
     }
     
-    get afterContent() => this._afterContent || '';
+    get afterContent() { return this._afterContent || '' };
     set afterContent(_afterContent_) { this._afterContent = _afterContent_; }
 
     /* 
@@ -86,8 +86,8 @@ class Box {
         }
     }
 
-    getAttributes() => this.attributes.length === 0 ? '' : this.attributes.map(v => {return `${v || ''} `}).join('');
-    getClassList() => this.classList.length === 0 ? '' : this.classList.map(v => { return ` ${v || ''}`}).join('');
+    getAttributes = () => this.attributes.length === 0 ? '' : this.attributes.map(v => { return `${v || ''} `}).join('');
+    getClassList = () => this.classList.length === 0 ? '' : this.classList.map(v => { return ` ${v || ''}`}).join('');
 
     inject(key, injection) { 
 	this.injections[key] = injection; 
@@ -118,7 +118,7 @@ class Box {
     Static Methods 
     */
 	
-    static tryGetBox(source) => Box.isBox(source) ? source : Box.isBoxLike(source) ? new Box(source) : null;
+    static tryGetBox = (source) => Box.isBox(source) ? source : Box.isBoxLike(source) ? new Box(source) : null;
 
     static isBoxLike(test) {
         const BoxConfigProperties = [
@@ -135,7 +135,7 @@ class Box {
         return _isBoxLike;
     }
    
-    static isBox(test) => test && typeof test !== 'undefined' && test instanceof Box;
+    static isBox = (test) => test && typeof test !== 'undefined' && test instanceof Box;
 
     static unboxMultiple(_children_) { 
         return _children_.map(v => { 
