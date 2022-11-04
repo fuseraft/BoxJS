@@ -22,7 +22,7 @@ class Box {
         this.before = null; // Box
         this.after = null; // Box
         this.beforeContent = '';
-		this.content = '';
+	this.content = '';
         this.afterContent = '';
         this.attributes = [];
         this.classList = [];
@@ -42,17 +42,17 @@ class Box {
         }
     }
 
-    /* ------------------------------------------------------------------------------------- 
+    /*  
     Properties
     */
 
-    get hasChildren() { return this.children && this.children.length > 0; }
+    get hasChildren() => return this.children && this.children.length > 0;
 
-    set content (_content_) { this._content = _content_ || ''; }
-    get content() { return this._content || ''; }
+    get content() => return this._content || '';
+    set content(_content_) { this._content = _content_ || ''; }
 
-    get beforeContent () { return this._beforeContent || ''; }
-    set beforeContent (_beforeContent_) { this._beforeContent = _beforeContent_; }
+    get beforeContent() => this._beforeContent || '';
+    set beforeContent(_beforeContent_) { this._beforeContent = _beforeContent_; }
 
     get innerContent() {
         let _innerContent = '';
@@ -67,14 +67,14 @@ class Box {
         return _innerContent;
     }
     
-    get afterContent () { return this._afterContent || ''; }
-    set afterContent (_afterContent_) { this._afterContent = _afterContent_; }
+    get afterContent() => this._afterContent || '';
+    set afterContent(_afterContent_) { this._afterContent = _afterContent_; }
 
-    /* ------------------------------------------------------------------------------------- 
+    /* 
     Instance Methods 
     */
 	
-    add (_box_) {
+    add(_box_) {
         if (Array.isArray(_box_)) {
             this.children = [...this.children, ..._box_];
         }
@@ -86,40 +86,41 @@ class Box {
         }
     }
 
-    getAttributes () { return this.attributes.length === 0 ? '' : this.attributes.map(v => {return `${v || ''} `}).join(''); }
-    getClassList () { return this.classList.length === 0 ? '' : this.classList.map(v => { return ` ${v || ''}`}).join('') }
+    getAttributes() => this.attributes.length === 0 ? '' : this.attributes.map(v => {return `${v || ''} `}).join('');
+    getClassList() => this.classList.length === 0 ? '' : this.classList.map(v => { return ` ${v || ''}`}).join('');
 
-    inject(key, injection) { this.injections[key] = injection; }
+    inject(key, injection) { 
+	this.injections[key] = injection; 
+    }
 
     html() {
         let html = [], _html = '';
         
         html.push(`<${this.tag}`);
-        if (this.classList.length > 0) html.push(` class="${this.getClassList().trim()}"`);
+
+	if (this.classList.length > 0) html.push(` class="${this.getClassList().trim()}"`);
         if (this.attributes.length > 0) html.push(` ${this.getAttributes().trim()}`);
-        html.push('>');
+        
+	html.push('>');
         html.push(this.innerContent || '');
         html.push(`</${this.tag}>`);
 
         _html = html.join('');
 
-        for (let key in this.injections) _html = _html.replace(`{{${key}}}`, this.injections[key]);
+        for (let key in this.injections) {
+	    _html = _html.replace(`{{${key}}}`, this.injections[key]);
+	}
 
         return _html;
     }
 
-    /* ------------------------------------------------------------------------------------- 
+    /*  
     Static Methods 
     */
 	
-	static tryGetBox (source) {
-		var b = null;
-		if (Box.isBox(source)) b = source;
-		else if (Box.isBoxLike(source)) b = new Box(source);
-		return b;
-	}
+    static tryGetBox(source) => Box.isBox(source) ? source : Box.isBoxLike(source) ? new Box(source) : null;
 
-    static isBoxLike (test) {
+    static isBoxLike(test) {
         const BoxConfigProperties = [
             'tag', 'before', 'after', 'beforeContent', 'afterContent', 'content', 
             'attributes', 'classList', 'children', 'injections'
@@ -134,15 +135,15 @@ class Box {
         return _isBoxLike;
     }
    
-    static isBox (test) { return test && typeof test !== 'undefined' && test instanceof Box; }
+    static isBox(test) => test && typeof test !== 'undefined' && test instanceof Box;
 
-    static unboxMultiple (_children_) { 
+    static unboxMultiple(_children_) { 
         return _children_.map(v => { 
             return Box.unbox(v); 
         }).join(''); 
     }
 	
-    static unbox (_box_) { 
+    static unbox(_box_) { 
         if (Box.isBox(_box_)) {
             if (_box_.hasChildren) {
                 return Box.unboxMultiple(_box_.children);
@@ -159,7 +160,7 @@ class Box {
         }
     }
 
-    static build (config) {
+    static build(config) {
         let html = new Box({ tag: 'html' }),
             head = new Box({ tag: 'head' }),
             body = new Box({ tag: 'body' });
@@ -171,7 +172,7 @@ class Box {
             head.content = '';
             body.content = '';
 
-			if (config.head) head = Box.tryGetBox(config.head);
+	    if (config.head) head = Box.tryGetBox(config.head);
             if (config.body) body = Box.tryGetBox(config.body);
 
             if (isString(config.title) && head) {
@@ -183,8 +184,8 @@ class Box {
                 }
             }
 
-            if (isArray(config.scripts)) head.content += config.scripts.map(v => { return `<script type="text/javascript" src="${v || ''}"></script>`; }).join('') || '';
-            if (isArray(config.styles)) head.content += config.styles.map(v => { return `<link type="text/css" rel="stylesheet" href="${v || ''}">`; }).join('') || '';
+            if (isArray(config.scripts)) head.content += config.scripts.map(v => `<script type="text/javascript" src="${v || ''}"></script>`).join('') || '';
+            if (isArray(config.styles)) head.content += config.styles.map(v => `<link type="text/css" rel="stylesheet" href="${v || ''}">`).join('') || '';
 
             if (config.injections && typeof config.injections === 'object') html.injections = config.injections;
         }
