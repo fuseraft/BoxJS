@@ -4,7 +4,7 @@
   "description": "A code generator for simple UI templating and component design in Node.",
   "main": "app.js",
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.17.3"
   },
   "devDependencies": {},
   "scripts": {
